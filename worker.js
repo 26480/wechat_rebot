@@ -13,11 +13,8 @@ else{
 }
 
 var profiles = {
-	"dxct.9way.biz" : {
-		token : "dexunchaotai"
-	},
-	"jtails.9way.biz" : {
-		token : "whosyoudaddy"
+	"test.host.org" : {
+		token : "tokentokentoken"
 	}
 };
 
