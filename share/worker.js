@@ -1,4 +1,5 @@
 "use strict";
+module.paths[module.paths.length] = process.cwd() + '/lib';
 var httpd = require("httpd");
 var fs = require("fs");
 var $ = require("request");

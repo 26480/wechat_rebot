@@ -1,0 +1,7 @@
+*
+
+!.gitignore
+
+!events.txt
+!keywords.txt
+!messages.txt
