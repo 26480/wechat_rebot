@@ -1,103 +1,48 @@
 #!/usr/bin/env node
 "use strict";
 
-(function (path) {
-    var root = path.dirname(path.dirname(process.argv[1]));
-    process.chdir(root);
-    module.paths[module.paths.length] = root + '/lib';
-})(require('path'));
+(function (path, self) {
+  process.chdir(path.dirname(path.dirname(self)));
+})(require('path'), process.argv[1]);
 
-var Rebot = {
+var ReBot = {
     'version': 'v0.0.1-alpha',
-    'options': require('getopt').parse(process.argv.slice(2), 'bd:p:w:V', {
-        'background': false,
-        'daemon': false,
-        'dir': true,
-        'port': true,
-        'worker': true,
-        'help': false,
-        'version': false
-    })
-};
+    'copyright': function () {
+      console.log([
+          ''
+        , '  Copyright (C) 2013-2014 Jay Chan and Snakevil Zen.'
+        , '  --LICENSE HERE--'
+        , ''
+        , '  Written and Maintained by Jay Chan and Snakevil Zen.'
+        , '  Report bugs to <https://github.com/26480/wechat_rebot/issues/new>.'
+      ].join('\n'));
+    }
+  }
+  , program = require('commander');
 
-console.log('Rebot ' + Rebot.version + ' (Node.js ' + process.version + ')\n');
-
-(function (options) {
-    var b = false,
-        i = 0;
-    for (; i < options['?'].length; i++) {
-        if ('?' == options['?'][i]) {
-            continue;
-        }
-        b = true;
-        console.log('illegal option -- ' + options['?'][i]);
-    }
-    for (i = 0; i < options[':'].length; i++) {
-        b = true;
-        console.log('option requires an argument -- ' + options[':'][i]);
-    }
-    if (b) {
-        process.exit(1);
-    }
-})(Rebot.options);
-
-if (-1 != Rebot.options['?'].indexOf('?') || Rebot.options.help || Rebot.options.V || Rebot.options.version) {
-    if (-1 != Rebot.options['?'].indexOf('?') || Rebot.options.help) {
-        console.log([
-            'Usage: rebot [OPTIONS]',
-            '',
-            'Mandatory arguments to long options are mandatory for short options too.',
-            '',
-            '  -b, --back,          run in background',
-            '      --daemon',
-            '  -d, --dir=DIR         customize database DIRectory, default: var/db',
-            '  -p, --port=PORT       PORT to listen on, default: 80',
-            '  -w, --worker=WORKER   customize WORKER',
-            '',
-            '  -?, --help            display this help and exit',
-            '  -V, --version         output version information and exit',
-            ''
-        ].join('\n'));
-    }
-    console.log([
-        'Copyright (C) 2013-2014 Jay Chan and Snakevil Zen.',
-        '--LICENSE HERE--',
-        '',
-        'Written and Maintained by Jay Chan and Snakevil Zen.',
-        'Report bugs to <https://github.com/26480/wechat_rebot/issues/new>.'
-    ].join('\n'));
-    process.exit();
-}
+console.log('\n  ReBot ' + ReBot.version + ' (Node.js ' + process.version + ')');
 
 (function (options) {
-    process.argv = [
-        process.argv[0],
-        'share/main.js',
-        'share/worker.js',
-        80,
-        'var/db',
-        'tty'
-    ];
-    for (var i in options) {
-        switch (i) {
-            case 'w':
-            case 'worker':
-                process.argv[2] = options[i][options[i].length - 1];
-                break;
-            case 'p':
-            case 'port':
-                process.argv[3] = options[i][options[i].length - 1];
-                break;
-            case 'd':
-            case 'dir':
-                process.argv[4] = options[i][options[i].length - 1];
-                break;
-            case 'b':
-            case 'back':
-            case 'daemon':
-                delete process.argv[5];
-                break;
-        }
-    }
-    require('../' + process.argv[1]);
-})(Rebot.options);
+  process.argv = [
+      process.argv[0]
+    , 'share/main'
+    , options.worker
+    , options.port
+    , options.dir
+  ];
+  if (!options.back && !options.daemon) process.argv[process.argv.length] = 'tty';
+  console.log('');
+  require('../share/main');
+})(
+  program
+    .version(ReBot.version)
+    .option('-b, --back', 'run in background')
+    .option('    --daemon')
+    .option('-d, --dir <DIR>', 'customize database DIRectory, default: var/db', 'var/db')
+    .option('-p, --port <PORT>', 'PORT to listen on, default: 80', parseInt, 80)
+    .option('-w, --worker <WORKER>', 'customize WORKER', 'share/worker.js')
+    .on('--help', ReBot.copyright)
+    .removeAllListeners('version')
+    .on('version', ReBot.copyright)
+    .parse(process.argv)
+);

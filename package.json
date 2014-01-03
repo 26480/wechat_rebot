@@ -1,0 +1,38 @@
+{
+  "name": "WeChat-ReBot",
+  "version": "0.0.1-alpha",
+  "description": "wechat_rebot ============",
+  "main": "sbin/rebot",
+  "scripts": {
+    "start": "sbin/rebot -b",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/26480/wechat_rebot.git"
+  },
+  "keywords": [
+    "wechat",
+    "robot"
+  ],
+  "author": {
+    "name": "Jay Chan",
+    "email": "<madfox.fw@gmail.com>",
+    "url": "http://jtails.com"
+  },
+  "contributors": [
+    {
+      "name": "Snakevil Zen",
+      "email": "zsnakevil@gmail.com",
+      "url": "https://szen.in"
+    }
+  ],
+  "license": "LGPL",
+  "bugs": {
+    "url": "https://github.com/26480/wechat_rebot/issues"
+  },
+  "homepage": "https://github.com/26480/wechat_rebot",
+  "dependencies": {
+    "commander": ">=2.1.0"
+  }
+}
